@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>傅依芃 財富顧問 & 理財規劃師 | Executive Wealth Advisory</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#0f172a',
+                            900: '#0b1329',
+                            950: '#050a18',
+                        },
+                        gold: {
+                            400: '#f3c669',
+                            500: '#d4af37',
+                            600: '#b89228',
+                        },
+                        slate: {
+                            850: '#152033',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: #0b1329;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fceabb 0%, #d4af37 50%, #f8b500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #d4af37 0%, #b89228 100%);
+        }
+
+        .glass-card {
+            background: rgba(21, 32, 51, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .glass-card-hover:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Timeline Connector */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 2px;
+            background: linear-gradient(180deg, #d4af37 0%, rgba(212, 175, 55, 0.1) 100%);
+        }
+
+        @media (min-width: 768px) {
+            .timeline-line::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Audio Wave Equalizer Animation */
+        .music-bar {
+            width: 3px;
+            height: 12px;
+            background-color: #d4af37;
+            border-radius: 2px;
+            animation: equalizer 1.2s infinite ease-in-out alternate;
+        }
+        .music-bar:nth-child(1) { animation-delay: 0.1s; }
+        .music-bar:nth-child(2) { animation-delay: 0.4s; }
+        .music-bar:nth-child(3) { animation-delay: 0.2s; }
+        .music-bar:nth-child(4) { animation-delay: 0.5s; }
+
+        @keyframes equalizer {
+            0% { height: 4px; }
+            100% { height: 16px; }
+        }
+
+        .music-paused .music-bar {
+            animation-play-state: paused;
+            height: 4px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-gold-500 selection:text-navy-950">
+
+    <!-- Background Audio Element -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=soft-ambient-piano-111154.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Music Switcher Widget -->
+    <div class="fixed bottom-6 left-6 z-50">
+        <button id="music-toggle-btn" onclick="toggleMusic()" class="flex items-center space-x-3 px-4 py-2.5 rounded-full glass-card hover:border-gold-400/80 transition-all shadow-xl group border border-gold-500/30">
+            <div id="music-bars" class="flex items-center space-x-1 music-paused h-4">
+                <span class="music-bar"></span>
+                <span class="music-bar"></span>
+                <span class="music-bar"></span>
+                <span class="music-bar"></span>
+            </div>
+            <span id="music-status-text" class="text-xs font-semibold text-slate-200 group-hover:text-gold-400 transition-colors">
+                背景音樂：點擊開啟
+            </span>
+            <i id="music-icon" class="fa-solid fa-volume-xmark text-gold-400 text-sm"></i>
+        </button>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-navy-950/85 backdrop-blur-md border-b border-white/10" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="#hero" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-lg gold-gradient-bg flex items-center justify-center font-extrabold text-navy-950 text-xl shadow-lg shadow-gold-500/20 group-hover:scale-105 transition-transform">
+                        傅
+                    </div>
+                    <div>
+                        <span class="block text-lg font-bold tracking-wider text-white">傅依芃 <span class="text-xs font-normal text-slate-400">| 資深財富顧問</span></span>
+                        <span class="block text-xs text-gold-400 font-medium tracking-widest uppercase">Taiwan · 退休規劃與高資產資產配置專家</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="#about" class="text-slate-300 hover:text-gold-400 transition-colors">職涯實戰</a>
+                    <a href="#advantage" class="text-slate-300 hover:text-gold-400 transition-colors">核心優勢</a>
+                    <a href="#insight" class="text-slate-300 hover:text-gold-400 transition-colors">顧問洞察</a>
+                    <a href="#credentials" class="text-slate-300 hover:text-gold-400 transition-colors">專業證照</a>
+                    <a href="#assessment" class="text-slate-300 hover:text-gold-400 transition-colors">流動性自測</a>
+                </nav>
+
+                <!-- Header CTA Button -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#contact" class="px-5 py-2.5 rounded-lg text-sm font-bold text-navy-950 gold-gradient-bg hover:opacity-90 transition-all shadow-md shadow-gold-500/20">
+                        預約一對一諮詢
+                    </a>
+                </div>
+
+                <!-- Mobile Navigation Toggle -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white focus:outline-none p-2" aria-label="Toggle menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-navy-900 border-b border-slate-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-gold-400 hover:bg-navy-800">職涯實戰</a>
+            <a href="#advantage" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-gold-400 hover:bg-navy-800">核心優勢</a>
+            <a href="#insight" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-gold-400 hover:bg-navy-800">顧問洞察</a>
+            <a href="#credentials" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-gold-400 hover:bg-navy-800">專業證照</a>
+            <a href="#assessment" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-gold-400 hover:bg-navy-800">流動性自測</a>
+            <a href="#contact" class="block px-3 py-2.5 rounded-md text-center font-bold text-navy-950 gold-gradient-bg">預約一對一諮詢</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-28 pb-20 md:pt-36 md:pb-32 overflow-hidden flex items-center min-h-screen">
+        <!-- Background Ambient Glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-400 text-xs sm:text-sm font-medium">
+                        <span class="flex h-2 w-2 rounded-full bg-gold-400 animate-ping"></span>
+                        <span>台灣 · 全職資深財富顧問 & 退休規劃專家</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                        將一生的辛苦拚搏，<br class="hidden sm:inline"/>轉化為<span class="gold-gradient-text">永續的財務安全</span>。
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-slate-300 font-normal max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        我是 <span class="text-white font-bold">傅依芃</span>。專為個人與高資產家族打造可落實的退休規劃，優化複雜資產配置，並為企業主築起阻絕商業風險的財富防火牆。
+                    </p>
+
+                    <!-- Key Stats & Highlights -->
+                    <div class="pt-4 grid grid-cols-3 gap-4 border-t border-slate-800 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-extrabold text-white">14<span class="text-gold-400 text-lg sm:text-xl">年</span></p>
+                            <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">兩度跨國創業實戰</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-extrabold text-white">KPMG</p>
+                            <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">四大審計嚴謹紀律</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-extrabold text-white">CFP®</p>
+                            <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">國際理財顧問準備中</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="pt-6 flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
+                        <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-bold text-navy-950 gold-gradient-bg hover:shadow-lg hover:shadow-gold-500/20 hover:scale-[1.02] transition-all text-center">
+                            開啟保密財務諮詢 <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                        <a href="#about" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-semibold text-slate-200 border border-slate-700 bg-slate-900/50 hover:bg-slate-800 hover:text-white transition-all text-center">
+                            探索職涯歷程
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Executive Portrait Card -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="glass-card rounded-3xl p-4 sm:p-5 relative overflow-hidden shadow-2xl border border-gold-400/30 max-w-md w-full">
+                        <!-- Profile Image Wrapper -->
+                        <div class="relative rounded-2xl overflow-hidden aspect-[4/5] bg-slate-900 shadow-inner group">
+                            <img src="https://i.pinimg.com/736x/f5/ac/a9/f5aca9af93658adc1173ef4d648a09bc.jpg" 
+                                 alt="傅依芃 財富顧問" 
+                                 class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x750/0f172a/d4af37?text=%E5%82%85%E4%BE%9D%E8%8A%8B+%E8%B2%A1%E5%AF%8C%E9%A1%A7%E5%95%8F';" />
+                            
+                            <!-- Overlay Gradient -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-transparent to-transparent opacity-80"></div>
+
+                            <!-- Name Badge over photo -->
+                            <div class="absolute bottom-4 left-4 right-4 p-4 rounded-xl glass-card border border-white/10">
+                                <h3 class="text-xl font-bold text-white">傅依芃 <span class="text-xs text-gold-400 font-medium">Yi-Peng Fu</span></h3>
+                                <p class="text-xs text-slate-300 mt-1">資深財富顧問 · 懂創業者的理財規劃師</p>
+                            </div>
+                        </div>
+
+                        <!-- Quote Box -->
+                        <div class="mt-4 p-3 rounded-xl bg-navy-900/80 border border-slate-800">
+                            <p class="text-xs text-slate-300 italic leading-relaxed">
+                                「多數顧問沒親自營運過企業，沒體會過月結算現金流緊張的壓力。我懂，這決定了我如何為您打造穩健的資產防護網。」
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About & Career Journey Section -->
+    <section id="about" class="py-20 bg-navy-900/80 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-gold-400 mb-2">職涯歷程</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-white">嚴謹審計為底，兩度創業淬鍊</p>
+                <p class="text-slate-400 mt-4 text-base">
+                    從四大會計師事務所的內部控制，到 14 年從零到一建立兩大實體事業，每一段經歷都化為我為客戶規劃財務時的真實經驗。
+                </p>
+            </div>
+
+            <!-- Timeline Container -->
+            <div class="relative timeline-line max-w-4xl mx-auto space-y-12">
+                
+                <!-- Chapter 1 -->
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full gold-gradient-bg text-navy-950 font-bold z-10 shadow-lg shadow-gold-500/20 md:absolute md:left-1/2 md:-translate-x-1/2 mb-4 md:mb-0">
+                        1
+                    </div>
+                    <div class="w-full md:w-1/2 md:pr-12 md:text-right">
+                        <div class="glass-card glass-card-hover rounded-xl p-6 transition-all">
+                            <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">職涯起點 · 審計紀律</span>
+                            <h3 class="text-xl font-bold text-white mt-1">KPMG 勤業眾信審計團隊</h3>
+                            <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                                在 KPMG 建立起嚴謹的財務報導、企業治理與內部控制稽核基礎。這種對數字與風險零妥協的嚴謹度，是我為每個家族設計財務方案的基石。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="hidden md:block w-1/2"></div>
+                </div>
+
+                <!-- Chapter 2 -->
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full gold-gradient-bg text-navy-950 font-bold z-10 shadow-lg shadow-gold-500/20 md:absolute md:left-1/2 md:-translate-x-1/2 mb-4 md:mb-0">
+                        2
+                    </div>
+                    <div class="hidden md:block w-1/2"></div>
+                    <div class="w-full md:w-1/2 md:pl-12">
+                        <div class="glass-card glass-card-hover rounded-xl p-6 transition-all">
+                            <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">首次創業 · 7年零售連鎖</span>
+                            <h3 class="text-xl font-bold text-white mt-1">中國大陸便利店連鎖事業</h3>
+                            <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                                前往中國大陸從零開始創業，將第一家校園便利店逐步發展為擁有數家分店的零售連鎖品牌，歷時七年親自管理營運、供應鏈與現金流。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chapter 3 -->
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full gold-gradient-bg text-navy-950 font-bold z-10 shadow-lg shadow-gold-500/20 md:absolute md:left-1/2 md:-translate-x-1/2 mb-4 md:mb-0">
+                        3
+                    </div>
+                    <div class="w-full md:w-1/2 md:pr-12 md:text-right">
+                        <div class="glass-card glass-card-hover rounded-xl p-6 transition-all">
+                            <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">二次創業 · 7年教育品牌</span>
+                            <h3 class="text-xl font-bold text-white mt-1">長沙親子游泳俱樂部</h3>
+                            <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                                2016 年跨足教育領域，於長沙創立高端親子游泳俱樂部。營運七年間精準掌控行銷獲客、人員管理與抗風險資金儲備，展現卓越耐力。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="hidden md:block w-1/2"></div>
+                </div>
+
+                <!-- Chapter 4 -->
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full gold-gradient-bg text-navy-950 font-bold z-10 shadow-lg shadow-gold-500/20 md:absolute md:left-1/2 md:-translate-x-1/2 mb-4 md:mb-0">
+                        4
+                    </div>
+                    <div class="hidden md:block w-1/2"></div>
+                    <div class="w-full md:w-1/2 md:pl-12">
+                        <div class="glass-card glass-card-hover rounded-xl p-6 border-gold-400/40 transition-all">
+                            <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">2024 至今 · 返台服務</span>
+                            <h3 class="text-xl font-bold text-white mt-1">全職資深財富顧問 & 理財規劃師</h3>
+                            <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                                帶著 KPMG 的審計精準度與 14 年跨國創業的同理心返台，專注協助企業主與高資產家庭進行退休規劃、風險隔離與流動性配置。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The Advisory Advantage Section -->
+    <section id="advantage" class="py-20 bg-navy-950 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-gold-400">顧問核心實戰優勢</h2>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+                        多數理財規劃師未曾管理過真實現金流。<br/><span class="gold-gradient-text">我親身體會過每一份壓力。</span>
+                    </h3>
+                    
+                    <p class="text-slate-300 text-base leading-relaxed">
+                        傳統顧問往往僅依賴教科書上的理論或既定商品做推廣，但教科書無法呈現當市場景氣低迷、營收急遽緊縮時，企業主與家庭所承受的心理與資金窒息感。
+                    </p>
+
+                    <p class="text-slate-300 text-base leading-relaxed">
+                        經營過兩個不同產業長達 14 年，我深刻理解企業主「紙上身價高、實質流動資金少」的困境。這讓我能用最貼近真實商業現況的角度，為您配置安全資產。
+                    </p>
+
+                    <div class="pt-2 space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 rounded-lg bg-gold-500/10 flex items-center justify-center text-gold-400 shrink-0 mt-1">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-base">不妥協的審計紀律</h4>
+                                <p class="text-slate-400 text-sm">KPMG 訓練帶來的嚴謹態度，確保財務方案具備高度抗風險與法律稅務防護力。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 rounded-lg bg-gold-500/10 flex items-center justify-center text-gold-400 shrink-0 mt-1">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-base">真切的流動性意識</h4>
+                                <p class="text-slate-400 text-sm">清楚分得清「估值與固定資產」和「危機時刻隨時能變現的救命現金」之差異。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Matrix Card -->
+                <div class="lg:col-span-6">
+                    <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+                        <h4 class="text-lg font-bold text-white border-b border-slate-800 pb-3 flex items-center justify-between">
+                            <span>規劃思維對比</span>
+                            <i class="fa-solid fa-sliders text-gold-400"></i>
+                        </h4>
+
+                        <div class="space-y-4">
+                            <!-- Comparison Item 1 -->
+                            <div class="p-4 rounded-xl bg-navy-900/60 border border-slate-800">
+                                <span class="text-xs text-slate-400 font-semibold uppercase">傳統單純產品銷售型顧問</span>
+                                <p class="text-slate-300 text-sm mt-1">過度專注單一金融商品回報率，忽略客戶本業風險與流動資金流向。</p>
+                                <div class="mt-3 pt-3 border-t border-slate-800/80">
+                                    <span class="text-xs text-gold-400 font-bold uppercase">傅依芃 顧問思維</span>
+                                    <p class="text-white text-sm font-medium mt-1">結合企業營運現金流、個人退休缺口與資產隔離，建構整體防護網。</p>
+                                </div>
+                            </div>
+
+                            <!-- Comparison Item 2 -->
+                            <div class="p-4 rounded-xl bg-navy-900/60 border border-slate-800">
+                                <span class="text-xs text-slate-400 font-semibold uppercase">常見高資產盲點</span>
+                                <p class="text-slate-300 text-sm mt-1">將 100% 盈餘繼續投入下一場擴張（「再做一把」），忽視防禦性提存。</p>
+                                <div class="mt-3 pt-3 border-t border-slate-800/80">
+                                    <span class="text-xs text-gold-400 font-bold uppercase">傅依芃 顧問思維</span>
+                                    <p class="text-white text-sm font-medium mt-1">在事業高峰期，將部分獲利撥入「企業風險無法波及」的絕對安全堡壘。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Advisor Insight & Blind Spot Section -->
+    <section id="insight" class="py-20 bg-navy-900/90 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-gold-400 mb-2">核心顧問洞察</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-white">填補高資產族群常見的財務盲點</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Blind Spot 1 -->
+                <div class="glass-card rounded-2xl p-8 flex flex-col justify-between relative group hover:border-gold-400/50 transition-all">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl gold-gradient-bg text-navy-950 flex items-center justify-center text-xl font-bold mb-6">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">「再做一把」的擴張陷阱</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            當事業順風順水時，企業主很少願意停下腳步思考退休規劃。習慣性地將所有盈餘 reinvest 投入下一個項目。
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 text-xs font-semibold text-gold-400">
+                        結果：帳面身價極高，真正可動用的流動資產極低。
+                    </div>
+                </div>
+
+                <!-- Blind Spot 2 -->
+                <div class="glass-card rounded-2xl p-8 flex flex-col justify-between relative group hover:border-gold-400/50 transition-all">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl gold-gradient-bg text-navy-950 flex items-center justify-center text-xl font-bold mb-6">
+                            <i class="fa-solid fa-vault"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">缺乏風險隔離的儲備</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            很少人會在巔峰期將部分資產撥入「企業連帶責任或經濟震盪無法波及」的獨立結構中，導致個人與企業風險高度綁定。
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 text-xs font-semibold text-gold-400">
+                        結果：一旦事業面臨低谷，個人與家庭生活陷入風險。
+                    </div>
+                </div>
+
+                <!-- Blind Spot 3 -->
+                <div class="glass-card rounded-2xl p-8 flex flex-col justify-between relative group hover:border-gold-400/50 transition-all">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl gold-gradient-bg text-navy-950 flex items-center justify-center text-xl font-bold mb-6">
+                            <i class="fa-solid fa-users-rectangle"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">避談傳承與接班規劃</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            許多家庭出於情感或尷尬避談資產傳承與稅務，缺乏提早安排，導致未來產生巨額稅務衝擊或家族成員間的糾紛。
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 text-xs font-semibold text-gold-400">
+                        結果：資產大幅縮水與傳承紛爭。
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Personal Lesson Callout -->
+            <div class="mt-12 glass-card rounded-2xl p-8 border-l-4 border-l-gold-500 bg-slate-900/80">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-left">
+                        <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">顧問的心路歷程</span>
+                        <h4 class="text-xl font-bold text-white">這不是理論，是我親身走過的代價。</h4>
+                        <p class="text-slate-300 text-sm max-w-3xl leading-relaxed">
+                            作為曾經的企業主，我親身體會過這些盲點帶來的考驗。我擔任財富顧問的目标很簡單：做那位聽懂您「沒說出口的焦慮」，並將抽象的退休目標轉化為具體安全保障的規劃師。
+                        </p>
+                    </div>
+                    <a href="#contact" class="shrink-0 px-6 py-3 rounded-xl font-bold text-navy-950 gold-gradient-bg hover:opacity-90 transition-all text-sm">
+                        預約對話
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Credentials Section -->
+    <section id="credentials" class="py-20 bg-navy-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-gold-400 mb-2">專業資格與嚴謹標準</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-white">專業證照與法定資歷</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="glass-card rounded-xl p-6 text-center space-y-3 glass-card-hover">
+                    <div class="w-12 h-12 rounded-full bg-gold-500/10 text-gold-400 mx-auto flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg">證券高級業務員</h3>
+                    <p class="text-gold-400 text-xs font-medium">Senior Securities Specialist</p>
+                    <p class="text-slate-300 text-xs leading-relaxed">具備台灣資本市場證券金融操作與管理之法定專業資格</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 text-center space-y-3 glass-card-hover">
+                    <div class="w-12 h-12 rounded-full bg-gold-500/10 text-gold-400 mx-auto flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg">產保與壽險業務員</h3>
+                    <p class="text-gold-400 text-xs font-medium">Property & Life Insurance Agent</p>
+                    <p class="text-slate-300 text-xs leading-relaxed">提供全方位人身保障、資產傳承與企業防護網之規劃能力</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 text-center space-y-3 glass-card-hover">
+                    <div class="w-12 h-12 rounded-full bg-gold-500/10 text-gold-400 mx-auto flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg">理財規劃人員 / CFP®</h3>
+                    <p class="text-gold-400 text-xs font-medium">CFP® Candidate</p>
+                    <p class="text-slate-300 text-xs leading-relaxed">理財規劃專業認證，並積極備考全球最高榮譽 CFP® 國際認證理財規劃顧問</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 text-center space-y-3 glass-card-hover">
+                    <div class="w-12 h-12 rounded-full bg-gold-500/10 text-gold-400 mx-auto flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-language"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg">TOEIC 865 分</h3>
+                    <p class="text-gold-400 text-xs font-medium">International Proficiency</p>
+                    <p class="text-slate-300 text-xs leading-relaxed">具備流利英文溝通與跨國資產配置之閱讀與顧問視野</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Retirement & Liquidity Assessment Tool -->
+    <section id="assessment" class="py-20 bg-navy-900 relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-gold-400/20 shadow-2xl">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">互動測試小工具</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">退休與資產流動性健康度自測</h2>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-2">
+                        拖動下方滑桿，即時檢視您目前的事業與個人流動資金比例風險。
+                    </p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Slider 1 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-semibold">
+                            <label for="illiquid-ratio" class="text-slate-200">變現困難資產佔總身價比例 (如事業、不動產)</label>
+                            <span id="illiquid-val" class="text-gold-400 font-bold">75%</span>
+                        </div>
+                        <input type="range" id="illiquid-ratio" min="10" max="95" value="75" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-gold-500">
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>10% (流動性極佳)</span>
+                            <span>95% (資產高度套牢)</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 2 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-semibold">
+                            <label for="liquid-months" class="text-slate-200">若本業營收停擺，個人現有現金可支撐月數</label>
+                            <span id="runway-val" class="text-gold-400 font-bold">6 個月</span>
+                        </div>
+                        <input type="range" id="liquid-months" min="1" max="36" value="6" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-gold-500">
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>1 個月 (高度危急)</span>
+                            <span>36+ 個月 (充裕安全)</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Feedback Box -->
+                    <div id="assessment-result" class="p-5 rounded-2xl bg-navy-950 border border-slate-800 transition-all">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 text-xl font-bold">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h4 id="result-title" class="text-base font-bold text-white">潛在流動性瓶頸風險</h4>
+                                <p id="result-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                    您的總資產過度集中於變現較慢的事業或房產。若本業面臨市場波動，缺乏足夠的獨立預備金可能迫使您折價出售長期資產。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <a href="#contact" class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl font-bold text-navy-950 gold-gradient-bg hover:opacity-90 transition-all text-sm">
+                            <span>預約 傅依芃 顧問客製化資產規劃</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Contact / Consultation Section -->
+    <section id="contact" class="py-20 bg-navy-950 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Contact Info -->
+                <div class="lg:col-span-5 space-y-8">
+                    <div>
+                        <h2 class="text-xs font-bold uppercase tracking-widest text-gold-400">開啟對話</h2>
+                        <h3 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">準備好為您的財富築起防護牆了嗎？</h3>
+                        <p class="text-slate-300 text-sm mt-4 leading-relaxed">
+                            若您正全心投入事業忙得無暇規劃退休，或是手握高資產卻缺乏抗風險的流動性，歡迎與我聊聊。讓我們將您一生的奮鬥成果，變成穩固的永續保障。
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4 p-4 rounded-xl glass-card">
+                            <div class="w-10 h-10 rounded-lg bg-gold-500/10 text-gold-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 font-semibold block uppercase">資深財富顧問</span>
+                                <span class="text-white text-sm font-bold">傅依芃 (Yi-Peng Fu)</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4 p-4 rounded-xl glass-card">
+                            <div class="w-10 h-10 rounded-lg bg-gold-500/10 text-gold-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 font-semibold block uppercase">服務區域</span>
+                                <span class="text-white text-sm font-medium">台灣台北 / 提供全台預約諮詢服務</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl glass-card space-y-3">
+                            <span class="text-xs text-slate-400 font-semibold block uppercase tracking-wider">社群平台與專業連結</span>
+                            <div class="grid grid-cols-3 gap-3">
+                                <a href="https://www.linkedin.com/in/yipengfu/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 py-3 px-3 rounded-xl bg-navy-900 border border-slate-700 hover:border-gold-400/80 hover:bg-slate-800 text-white hover:text-gold-400 transition-all text-xs font-semibold group shadow-sm">
+                                    <i class="fa-brands fa-linkedin text-lg text-gold-400 group-hover:scale-110 transition-transform"></i>
+                                    <span>LinkedIn</span>
+                                </a>
+                                <a href="https://www.facebook.com/judy.fu.9" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 py-3 px-3 rounded-xl bg-navy-900 border border-slate-700 hover:border-gold-400/80 hover:bg-slate-800 text-white hover:text-gold-400 transition-all text-xs font-semibold group shadow-sm">
+                                    <i class="fa-brands fa-facebook text-lg text-gold-400 group-hover:scale-110 transition-transform"></i>
+                                    <span>Facebook</span>
+                                </a>
+                                <a href="https://www.instagram.com/oceanwhile/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 py-3 px-3 rounded-xl bg-navy-900 border border-slate-700 hover:border-gold-400/80 hover:bg-slate-800 text-white hover:text-gold-400 transition-all text-xs font-semibold group shadow-sm">
+                                    <i class="fa-brands fa-instagram text-lg text-gold-400 group-hover:scale-110 transition-transform"></i>
+                                    <span>Instagram</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-navy-900 border border-slate-800 space-y-2">
+                        <div class="flex items-center space-x-2 text-gold-400 text-sm font-bold">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <span>全程嚴格保密承諾</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            您所提供的任何個人財務狀況、企業概況及諮詢內容，均受職業道德規範與嚴格保密協定保護。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Consultation Form -->
+                <div class="lg:col-span-7">
+                    <form id="consultation-form" onsubmit="handleFormSubmit(event)" class="glass-card rounded-3xl p-6 sm:p-10 space-y-6 border border-gold-400/20">
+                        <h4 class="text-xl font-bold text-white border-b border-slate-800 pb-4">預約一對一策略諮詢</h4>
+
+                        <!-- FormSubmit Hidden Parameters (Auto Email Dispatching) -->
+                        <input type="hidden" name="_subject" value="【官網一對一諮詢預約】傅依芃 財富顧問頁面新申請">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="table">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">您的姓名 *</label>
+                                <input type="text" name="姓名" required placeholder="例如：林先生 / 張小姐" class="w-full px-4 py-3 rounded-xl bg-navy-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-gold-400 transition-colors text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">聯絡電話 *</label>
+                                <input type="tel" name="聯絡電話" required placeholder="0912-345-678" class="w-full px-4 py-3 rounded-xl bg-navy-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-gold-400 transition-colors text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">您的身分背景 *</label>
+                            <select name="身分背景" required class="w-full px-4 py-3 rounded-xl bg-navy-900 border border-slate-700 text-white focus:outline-none focus:border-gold-400 transition-colors text-sm">
+                                <option value="" disabled selected>請選擇您的現狀身分</option>
+                                <option value="企業主 / 創業家 / 自營商">企業主 / 創業家 / 自營商</option>
+                                <option value="高階主管 / 專業人士">高階主管 / 專業人士</option>
+                                <option value="高資產家族成員 / 傳承代表">高資產家族成員 / 傳承代表</option>
+                                <option value="預計 5 年內退休者">預計 5 年內退休者</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">主要想諮詢的財務目標</label>
+                            <textarea name="諮詢目標與議題" rows="3" placeholder="請簡述您目前最關心的財務議題，例如：退休金缺口試算、資產防禦隔離、家族傳承規劃等..." class="w-full px-4 py-3 rounded-xl bg-navy-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-gold-400 transition-colors text-sm"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-xl text-base font-bold text-navy-950 gold-gradient-bg hover:opacity-95 transition-all shadow-lg shadow-gold-500/20 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>送出保密諮詢申請</span>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Modal Overlay -->
+    <div id="confirmation-modal" class="fixed inset-0 z-50 bg-navy-950/80 backdrop-blur-md flex items-center justify-center hidden p-4">
+        <div class="glass-card rounded-3xl p-8 max-w-md w-full text-center space-y-6 border border-gold-400/40 shadow-2xl">
+            <div class="w-16 h-16 rounded-full gold-gradient-bg text-navy-950 flex items-center justify-center text-2xl font-bold mx-auto">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-bold text-white">已收到您的預約申請</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    感謝您的信任。傅依芃 顧問將會於 24 小時之內親自與您聯繫，確認一對一諮詢時間。
+                </p>
+            </div>
+            <button onclick="closeModal()" class="w-full py-3 rounded-xl font-bold text-navy-950 gold-gradient-bg hover:opacity-90 transition-all">
+                關閉視窗
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-gold-500 text-navy-950 px-5 py-3 rounded-xl font-bold text-sm shadow-xl hidden transition-all duration-300 flex items-center space-x-2">
+        <i class="fa-solid fa-copy"></i>
+        <span id="toast-msg">已將 Email 複製至剪貼簿！</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-navy-950 border-t border-slate-800 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+            <p>© 2026 傅依芃 財富顧問 & 理財規劃師 (Yi-Peng Fu Advisory). 版權所有.</p>
+            <p class="max-w-2xl mx-auto text-slate-600">
+                證券高級業務員 · 產人身保險業務員 · 理財規劃人員 · CFP® 國際認證理財顧問準備中
+            </p>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        // Mobile Drawer Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Background Music Control Logic
+        const audio = document.getElementById('bg-audio');
+        const musicBars = document.getElementById('music-bars');
+        const musicStatusText = document.getElementById('music-status-text');
+        const musicIcon = document.getElementById('music-icon');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicBars.classList.add('music-paused');
+                musicStatusText.textContent = "背景音樂：點擊開啟";
+                musicIcon.className = "fa-solid fa-volume-xmark text-gold-400 text-sm";
+                isPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    musicBars.classList.remove('music-paused');
+                    musicStatusText.textContent = "背景音樂：播放中";
+                    musicIcon.className = "fa-solid fa-volume-high text-gold-400 text-sm animate-pulse";
+                    isPlaying = true;
+                }).catch(err => {
+                    console.log("Audio playback error:", err);
+                });
+            }
+        }
+
+        // Assessment Calculator Logic
+        const illiquidInput = document.getElementById('illiquid-ratio');
+        const illiquidVal = document.getElementById('illiquid-val');
+        const liquidInput = document.getElementById('liquid-months');
+        const runwayVal = document.getElementById('runway-val');
+        
+        const resultTitle = document.getElementById('result-title');
+        const resultDesc = document.getElementById('result-desc');
+
+        function updateAssessment() {
+            const illiquid = parseInt(illiquidInput.value);
+            const months = parseInt(liquidInput.value);
+
+            illiquidVal.textContent = illiquid + '%';
+            runwayVal.textContent = months + ' 個月';
+
+            if (illiquid >= 70 && months < 6) {
+                resultTitle.textContent = "高風險：流動性嚴重瓶頸";
+                resultTitle.className = "text-base font-bold text-red-400";
+                resultDesc.textContent = "您的資產變現難度極高，且現有緊急準備金不足 6 個月。一旦本業營收急遽緊縮，您可能被迫折價拋售長期資產以換取現金。";
+            } else if (illiquid >= 50 && months >= 6 && months <= 12) {
+                resultTitle.textContent = "中度風險：建議建構隔離防護";
+                resultTitle.className = "text-base font-bold text-gold-400";
+                resultDesc.textContent = "您具備基礎的緊急預備金，但個人身價仍有相當大的比例與企業本業風險同頻波動。建議儘早規劃獨立於企業之外的安全資產堡壘。";
+            } else {
+                resultTitle.textContent = "健康：流動性防護良好";
+                resultTitle.className = "text-base font-bold text-emerald-400";
+                resultDesc.textContent = "您的現金流動性儲備充足！下一步建議專註於長期抗通膨退休年金流、資產傳承防範與家族稅務優化。";
+            }
+        }
+
+        illiquidInput.addEventListener('input', updateAssessment);
+        liquidInput.addEventListener('input', updateAssessment);
+
+        // Form Submit Handler (Sends data directly to oceanwhileru@gmail.com)
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+
+            // Update button visual state while sending
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> <span>資料送出中...</span>`;
+
+            try {
+                const formData = new FormData(form);
+                await fetch('https://formsubmit.co/ajax/oceanwhileru@gmail.com', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+            } catch (err) {
+                console.error("Form submit error:", err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+                document.getElementById('confirmation-modal').classList.remove('hidden');
+                form.reset();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('confirmation-modal').classList.add('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('confirmation-modal').classList.add('hidden');
+            document.getElementById('consultation-form').reset();
+        }
+
+        // Copy Email to Clipboard
+        function copyEmail() {
+            const emailText = document.getElementById('email-address').textContent;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(emailText).then(showToast);
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.value = emailText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Copy failed', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
